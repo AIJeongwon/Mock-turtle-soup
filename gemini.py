@@ -7,6 +7,20 @@ $ pip install google-generativeai
 import os
 import google.generativeai as genai
 
+safety_setting=[
+        {
+            "category": "HARM_CATEGORY_DANGEROUS",
+            "threshold": "BLOCK_ONLY_HIGH",
+        },
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_ONLY_HIGH",
+        },
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_ONLY_HIGH",
+        },
+    ]
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 # Create the model
@@ -21,7 +35,7 @@ generation_config = {
 model = genai.GenerativeModel(
     model_name="gemini-1.5-flash",
     generation_config=generation_config,
-    # safety_settings = Adjust safety settings
+    safety_settings = safety_setting
     # See https://ai.google.dev/gemini-api/docs/safety-settings
 )
 
@@ -51,9 +65,41 @@ chat_session = model.start_chat(
                 "**어서 오세요, 바다거북스프 놀이에 참여해주셔서 감사합니다!** 🐢🍲\n\n저는 오늘 여러분을 흥미진진한 나폴리탄 괴담 속으로 안내할 주최자입니다. 준비되셨나요? \n\n**시작**하겠다는 채팅을 치시면 수수께끼를 알려드리고 질문을 시작하실 수 있습니다. \n\n**주의:** 20번의 질문 안에 정답을 맞춰야 승리하며, 질문에 대한 답은 **예** 또는 **아니오**로만 대답 가능합니다! \n\n**자, 숨을 크게 들이쉬고, 괴담의 세계로 함께 빠져들어 보세요...** ",
             ],
         },
+        {
+            "role": "user",
+            "parts": [
+                "문제는 이거로 주면 돼. 욕실에서 샤워 하고 있는데, 주방 쪽에서 비명소리가 들렸다. 놀란 나는 대충 타올을 걸치고 서둘러 주방으로 나갈 수 밖에 없었다. 복면을 쓴 사람은 나를 보자마자 후다닥 창문 밖으로 뛰어 나가 버렸고 나는 활짝 열린 창문을 바라보며 새파랗게 질린채 주저앉았다.",
+            ],
+        },
+        {
+            "role": "model",
+            "parts": [
+                "네",
+            ],
+        },
+        {
+            "role": "user",
+            "parts": [
+                "그리고 이게 해설이야. 거실에는, 온 몸이 피투성이가 되어 있는 부모님과 남동생의 시체가 누워 있었다. 내가 가족을 죽인 후 씻고나온 새에 도둑이 들어버린 상황.. 사실 비명은 가족이 아니라 도둑이 지른 것이었으며 도둑은 그 사실을 알고 바로 도망쳐버린 것이다.",
+            ],
+        },
+        {
+            "role": "model",
+            "parts": [
+                "네",
+            ],
+        },
     ]
 )
 
 response = chat_session.send_message("시작")
 
 print(response.text)
+
+while True:
+    user_query = input()
+    if user_query == "정지":
+        break
+    print(f'[사용자]: {user_query}')   
+    response = chat_session.send_message(user_query)
+    print(f'[모델]: {response.text}')
