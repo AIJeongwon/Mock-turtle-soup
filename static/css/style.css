@@ -1,0 +1,22 @@
+/* body(바디) 정의 */
+body {
+    /* 고정 상단메뉴를 위해 상단 공간 생성 */
+    padding-top: 5px;
+}
+
+.form-control-dark {
+    border-color: var(--bs-gray);
+}
+
+.form-control-dark:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+}
+
+.text-small {
+    font-size: 90%;
+}
+
+.dropdown-toggle:not(:focus) {
+    outline: 0;
+}
