@@ -20,6 +20,5 @@ from .views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', mainpage, name='main'),
-    path('questions/', include('chats.urls')),
+    path('', include('chats.urls')),
 ]

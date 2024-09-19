@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django .views.generic import View
+from django.views.generic import View
+from django.contrib import auth
+from django.contrib.auth.models import User
 from .models import *
 
 import os
@@ -109,7 +111,7 @@ class question_view(View):
 
 class start_chat(View):
     context = {}
-    template_name = "start_chat.html"
+    template_name = "main.html"
     def get(self, request):
         return render(request, self.template_name, self.context)
     
@@ -122,3 +124,53 @@ class start_chat(View):
             "response" : response.text,
         }
         return render(request, self.template_name, self.context)
+    
+class login(View):
+    template_name = "login.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        user_id = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(request, username=user_id, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('chats')
+        else:
+            error_message = '아이디 또는 패스워드가 유효하지 않습니다.'
+            return render(request, self.template_name, {'error_message': error_message})
+
+class register(View):
+    template_name = "register.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+    
+    def post(self, request):
+        user_id = request.POST['txt_login_id']
+        email = request.POST['txt_email']
+        password = request.POST['txt_password']
+        password_chk = request.POST['txt_password_chk']
+
+        if password == password_chk:
+            try:
+                # user = User.objects.create_user(user_id, email, password)
+                # user.save()
+                # auth.login(request, user)
+                # return redirect('chats')
+                return render(request, self.template_name, {
+                    "txt_login_id" : user_id,
+                    "txt_email" : email,
+                    "txt_password" : password,
+                })
+            except:
+                error_message = '계정을 생성하는 중 에러가 발생했습니다.'
+            return render(request, self.template_name, {'error_message': error_message})
+        else:
+            error_message = "패스워드가 일치하지 않습니다." 
+            return render(request, self.template_name, {'error_message': error_message})
+        
