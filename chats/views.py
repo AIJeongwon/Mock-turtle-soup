@@ -124,6 +124,14 @@ class start_chat(View):
             "response" : response.text,
         }
         return render(request, self.template_name, self.context)
+
+class main(View):
+    template_name = "main.html"
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        return render(request, self.template_name)
     
 class login(View):
     template_name = "login.html"
@@ -132,14 +140,14 @@ class login(View):
         return render(request, self.template_name)
 
     def post(self, request):
-        user_id = request.POST['username']
-        password = request.POST['password']
+        user_id = request.POST['txt_login_id']
+        password = request.POST['txt_password']
 
         user = auth.authenticate(request, username=user_id, password=password)
 
         if user is not None:
             auth.login(request, user)
-            return redirect('chats')
+            return redirect('chats:question')
         else:
             error_message = '아이디 또는 패스워드가 유효하지 않습니다.'
             return render(request, self.template_name, {'error_message': error_message})
@@ -173,4 +181,22 @@ class register(View):
         else:
             error_message = "패스워드가 일치하지 않습니다." 
             return render(request, self.template_name, {'error_message': error_message})
+
+class find_ID(View):
+    template_name = "findID.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+    
+    def post(self, request):
+        return render(request, self.template_name)
+    
+class find_PW(View):
+    template_name = "findPW.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+    
+    def get(self, request):
+        return render(request, self.template_name)
         
