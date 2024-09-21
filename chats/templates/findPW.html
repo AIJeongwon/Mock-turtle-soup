@@ -7,7 +7,8 @@
     <link
         href="https://w7.pngwing.com/pngs/111/174/png-transparent-green-turtle-illustration-turtle-emoji-android-oreo-turtle-animals-vertebrate-grass-thumbnail.png"
         rel="shortcut icon" type="image/x-icon">
-    <link rel="stylesheet" , href="static/css/style.css">
+    {% load static %}
+    <link rel="stylesheet" , href={% static 'css/style.css' %}>
 </head>
 
 <body>
@@ -38,13 +39,16 @@
                     <div><input type="email" , class="login-input" , name="txt_email" , id="txt_email" ,
                             placeholder="이메일"></div>
                     <div class="login-alert-pw">사용할 이메일을 입력해주세요.</div>
-                    <div><input type="password" , class="login-input" , name="txt_password" , id="txt_password" ,
-                            placeholder="비밀번호"></div>
-                    <div class="login-alert-pw">패스워드를 입력해주세요.</div>
+                    <div><input type="password" , class="login-input" , name="txt_password_old" , id="txt_password" ,
+                            placeholder="기존 비밀번호"></div>
+                    <div class="login-alert-pw">기존 패스워드를 입력해주세요.</div>
+                    <div><input type="password" , class="login-input" , name="txt_password_new" , id="txt_password_chk"
+                            , placeholder="새비밀번호"></div>
+                    <div class="login-alert-pw">새로운 패스워드를 입력해주세요.</div>
                     <div><input type="password" , class="login-input" , name="txt_password_chk" , id="txt_password_chk"
-                            , placeholder="비밀번호 확인"></div>
-                    <div class="login-alert-pw">패스워드를 다시 한번 입력해주세요.</div>
-                    <button class="login-button" , type="submit">바다거북스프로 회원가입</button>
+                            , placeholder="새비밀번호 확인"></div>
+                    <div class="login-alert-pw">새로운 패스워드를 다시 한번 입력해주세요.</div>
+                    <button class="login-button" , type="submit">비밀번호 변경</button>
                 </form>
                 {% if txt_login_id %}
                 <div>
@@ -54,7 +58,7 @@
                     <p><strong>이메일: </strong>{{ txt_email }}</p>
                 </div>
                 <div>
-                    <p><strong>Gemini: </strong>{{ txt_password }}</p>
+                    <p><strong>Password: </strong>{{ txt_password }}</p>
                 </div>
                 {% endif %}
                 {% if error_message %}

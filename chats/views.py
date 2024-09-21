@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 from .models import *
 
 import os
@@ -166,11 +167,11 @@ class register(View):
 
         if password == password_chk:
             try:
-                # user = User.objects.create_user(user_id, email, password)
-                # user.save()
-                # auth.login(request, user)
-                # return redirect('chats')
-                return render(request, self.template_name, {
+                user = User.objects.create_user(user_id, email, password)
+                user.save()
+                auth.login(request, user)
+                return redirect('chats:login')
+                return render(request, self.template_name, { #테스트 코드
                     "txt_login_id" : user_id,
                     "txt_email" : email,
                     "txt_password" : password,
@@ -189,7 +190,16 @@ class find_ID(View):
         return render(request, self.template_name)
     
     def post(self, request):
-        return render(request, self.template_name)
+        email = request.POST['txt_email']
+        try:
+            user = User.objects.get(email=email)
+            if user is not None:
+                message = "당신의 아이디는 " + str(user.username) + " 입니다." 
+                return render(request, self.template_name, {'message' : message})
+        except:
+            message = "이메일과 일치하는 아이디가 없습니다."
+
+        return render(request, self.template_name, {'message' : message})
     
 class find_PW(View):
     template_name = "findPW.html"
@@ -197,6 +207,36 @@ class find_PW(View):
     def get(self, request):
         return render(request, self.template_name)
     
-    def get(self, request):
-        return render(request, self.template_name)
+    def post(self, request):
+        user_id = request.POST['txt_login_id']
+        email = request.POST['txt_email']
+        password_old = request.POST['txt_password_old']
+        password_new = request.POST['txt_password_new']
+        password_chk = request.POST['txt_password_chk']
+
+        if password_new == password_chk:
+            try:
+                user = User.objects.filter(
+                        username=user_id,
+                        email = email
+                    ).get()
+                if check_password(password_old, user.password):
+                    user.set_password(password_new)
+                    user.save()
+                    # return redirect('chats')
+                    return render(request, self.template_name, { # 테스트 코드
+                        "txt_login_id" : user_id,
+                        "txt_email" : email,
+                        "txt_password" : password_new,
+                    })
+                else:
+                    error_message = "기존 패스워드가 일치하지 않습니다." 
+
+            except:
+                error_message = '일치하지 않는 아이디 또는 이메일이 있습니다.'
+            
+            return render(request, self.template_name, {'error_message': error_message})
+        else:
+            error_message = "패스워드가 일치하지 않습니다." 
+            return render(request, self.template_name, {'error_message': error_message})
         
