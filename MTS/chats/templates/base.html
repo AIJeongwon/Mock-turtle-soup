@@ -26,16 +26,22 @@
 <body>
     <!-- header 정의 -->
     <header>
+        <!--네비게이션 바-->
         <div class="nav-container">
             <a class="title" , href="/main"><img src="{% static 'img/mock_turtle_soup.png' %}" , width="200px" ,
                     height="40px"></a>
             <div class="nav-contents">
                 <ul class="button-set"></ul>
                 <ul class="button-set">
-                    <button class="inline-button">문제 목록</button>
-                    <button class="inline-button">문제 만들기</button>
-                    <button class="inline-button">무작위 문제</button>
+                    <button class="inline-button" , onclick="location.href = '/question'"">문제 목록</button>
+                    <button class="inline-button", onclick="location.href = '/question'"">문제 만들기</button>
+                    <button class="inline-button", onclick="location.href = '/question'"">무작위 문제</button>
+                    {% if user.is_authenticated %}
+                    <h5>{{user.username}}<h4>님</h4></h5>
+                    <button class="inline-button", onclick="location.href = '/logout'">로그아웃</button>
+                    {% else %}
                     <button class="inline-button" , onclick="location.href = '/login'">로그인</button>
+                    {% endif %}
                 </ul>
             </div>
         </div>

@@ -134,6 +134,15 @@
     color: gray;
 }
 
+.form-control {
+    width: 400px;
+    height: 50px;
+    margin: 5px;
+    border-color: rgb(194, 194, 194);
+    border-width: 1px;
+    border-style: solid;
+}
+
 header {
     position: fixed;
     top: 0;

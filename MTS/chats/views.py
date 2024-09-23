@@ -99,22 +99,25 @@ chat_session = model.start_chat(
 
 # 클래스형 뷰 생성
 class question_view(View):
-
     context = {}
     template_name = "question_list.html"
     def get(self, request):
-        questions_list = Question.objects.all()
-        self.context = {"questions_list" : questions_list}
-        return render(request, self.template_name, self.context)
+        if not request.user.is_authenticated:
+            return redirect('chats:login')
+        else:
+            return render(request, self.template_name)
     
     def post(self, request):
         return render(request, self.template_name, self.context)
 
 class start_chat(View):
     context = {}
-    template_name = "main.html"
+    template_name = "start_chat.html"
     def get(self, request):
-        return render(request, self.template_name, self.context)
+        if not request.user.is_authenticated:
+            return redirect('chats:login')
+        else:
+            return render(request, self.template_name)
     
     def post(self, request):
         user_input = request.POST.get('user_input')
@@ -138,7 +141,10 @@ class login(View):
     template_name = "login.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        if request.user.is_authenticated:
+            return redirect('chats:main')
+        else:
+            return render(request, self.template_name)
 
     def post(self, request):
         user_id = request.POST['txt_login_id']
@@ -148,16 +154,29 @@ class login(View):
 
         if user is not None:
             auth.login(request, user)
-            return redirect('chats:question')
+            return redirect('chats:main')
         else:
             error_message = '아이디 또는 패스워드가 유효하지 않습니다.'
             return render(request, self.template_name, {'error_message': error_message})
+        
+class logout(View):
+    template_name = "main.html"
+    def get(self, request):
+        auth.logout(request)
+        return redirect('chats:main')
+    
+    def post(self, request):
+        auth.logout(request)
+        return redirect('chats:main')
 
 class register(View):
     template_name = "register.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        if request.user.is_authenticated:
+            return redirect('chats:main')
+        else:
+            return render(request, self.template_name)
     
     def post(self, request):
         user_id = request.POST['txt_login_id']
@@ -169,13 +188,7 @@ class register(View):
             try:
                 user = User.objects.create_user(user_id, email, password)
                 user.save()
-                auth.login(request, user)
                 return redirect('chats:login')
-                return render(request, self.template_name, { #테스트 코드
-                    "txt_login_id" : user_id,
-                    "txt_email" : email,
-                    "txt_password" : password,
-                })
             except:
                 error_message = '계정을 생성하는 중 에러가 발생했습니다.'
             return render(request, self.template_name, {'error_message': error_message})
@@ -187,7 +200,10 @@ class find_ID(View):
     template_name = "findID.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        if request.user.is_authenticated:
+            return redirect('chats:main')
+        else:
+            return render(request, self.template_name)
     
     def post(self, request):
         email = request.POST['txt_email']
@@ -205,7 +221,10 @@ class find_PW(View):
     template_name = "findPW.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        if request.user.is_authenticated:
+            return redirect('chats:main')
+        else:
+            return render(request, self.template_name)
     
     def post(self, request):
         user_id = request.POST['txt_login_id']

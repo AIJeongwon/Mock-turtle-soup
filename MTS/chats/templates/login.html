@@ -7,13 +7,13 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="login-alert-total"> ID 혹은 패스워드가 올바르지 않거나 회원가입하지 않은 ID입니다.</div>
-                <div><input type="text" , class="login-input" , name="txt_login_id" , id="txt_login_id" ,
-                        placeholder="아이디"></div>
+                <div><input type="text" class="form-control" name="txt_login_id" id="txt_login_id" , placeholder="아이디"
+                        value="{{ form.username.value|default_if_none:'' }}"></div>
                 <div class="login-alert-id">ID를 입력해주세요.</div>
-                <div><input type="password" , class="login-input" , name="txt_password" , id="txt_password" ,
-                        placeholder="비밀번호"></div>
+                <div><input type="password" class="form-control" name="txt_password" id="txt_password" ,
+                        placeholder="비밀번호" value="{{ form.password.value|default_if_none:'' }}"></div>
                 <div class="login-alert-pw">패스워드를 입력해주세요.</div>
-                <button class="login-button" , type="submit">바다거북스프 로그인</button>
+                <button class="login-button" type="submit">바다거북스프 로그인</button>
             </form>
             {% if txt_login_id %}
             <div>
