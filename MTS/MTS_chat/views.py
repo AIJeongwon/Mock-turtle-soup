@@ -103,7 +103,7 @@ class question_view(View):
     template_name = "question_list.html"
     def get(self, request):
         if not request.user.is_authenticated:
-            return redirect('chats:login')
+            return redirect('MTS_chat:login')
         else:
             return render(request, self.template_name)
     
@@ -115,7 +115,7 @@ class start_chat(View):
     template_name = "start_chat.html"
     def get(self, request):
         if not request.user.is_authenticated:
-            return redirect('chats:login')
+            return redirect('MTS_chat:login')
         else:
             return render(request, self.template_name)
     
@@ -142,7 +142,7 @@ class login(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('chats:main')
+            return redirect('MTS_chat:main')
         else:
             return render(request, self.template_name)
 
@@ -154,7 +154,7 @@ class login(View):
 
         if user is not None:
             auth.login(request, user)
-            return redirect('chats:main')
+            return redirect('MTS_chat:main')
         else:
             error_message = '아이디 또는 패스워드가 유효하지 않습니다.'
             return render(request, self.template_name, {'error_message': error_message})
@@ -163,18 +163,18 @@ class logout(View):
     template_name = "main.html"
     def get(self, request):
         auth.logout(request)
-        return redirect('chats:main')
+        return redirect('MTS_chat:main')
     
     def post(self, request):
         auth.logout(request)
-        return redirect('chats:main')
+        return redirect('MTS_chat:main')
 
 class register(View):
     template_name = "register.html"
 
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('chats:main')
+            return redirect('MTS_chat:main')
         else:
             return render(request, self.template_name)
     
@@ -188,7 +188,7 @@ class register(View):
             try:
                 user = User.objects.create_user(user_id, email, password)
                 user.save()
-                return redirect('chats:login')
+                return redirect('MTS_chat:login')
             except:
                 error_message = '계정을 생성하는 중 에러가 발생했습니다.'
             return render(request, self.template_name, {'error_message': error_message})
@@ -201,7 +201,7 @@ class find_ID(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('chats:main')
+            return redirect('MTS_chat:main')
         else:
             return render(request, self.template_name)
     
@@ -222,7 +222,7 @@ class find_PW(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('chats:main')
+            return redirect('MTS_chat:main')
         else:
             return render(request, self.template_name)
     
@@ -242,7 +242,7 @@ class find_PW(View):
                 if check_password(password_old, user.password):
                     user.set_password(password_new)
                     user.save()
-                    # return redirect('chats')
+                    # return redirect('MTS_chat')
                     return render(request, self.template_name, { # 테스트 코드
                         "txt_login_id" : user_id,
                         "txt_email" : email,

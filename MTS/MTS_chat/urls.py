@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from .views import *
 
-app_name = "chats"
+app_name = "MTS_chat"
 
 urlpatterns = [
     path('', main.as_view(), name='default'),
