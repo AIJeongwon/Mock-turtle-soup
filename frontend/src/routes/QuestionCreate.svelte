@@ -6,7 +6,7 @@
     let error = {detail:[]}
     let subject = ''
     let quest = ''
-    let ans = ''
+    let answer = ''
 
     function post_question(event) {
         event.preventDefault()
@@ -14,7 +14,7 @@
         let params = {
             subject: subject,
             quest: quest,
-            ans: ans
+            answer: answer
         }
 
         fastapi('post', url, params,
@@ -42,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="content">정답</label>
-            <textarea class="form-control" rows="10" bind:value="{ans}"></textarea>
+            <textarea class="form-control" rows="10" bind:value="{answer}"></textarea>
         </div>
         <button class="btn btn-primary" on:click="{post_question}">저장하기</button>
     </form>

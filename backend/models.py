@@ -10,13 +10,15 @@ class Question(Base):
     id = Column(Integer, primary_key=True)
     subject = Column(String, nullable=False)
     quest = Column(Text, nullable=False) # Content
+    answer = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
     
 
-class Answer(Base):
-    __tablename__ = "answer"
+class Comment(Base):
+    __tablename__ = "comment"
 
     id = Column(Integer, primary_key=True)
-    ans = Column(Text, nullable=False) # Content
+    content = Column(Text, nullable=False)
+    create_date = Column(DateTime, nullable=False)
     question_id = Column(Integer, ForeignKey("question.id"))
-    question = relationship("Question", backref="answers")
+    question = relationship("Question", backref="comments")
