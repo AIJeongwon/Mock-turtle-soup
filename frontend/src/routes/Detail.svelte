@@ -1,6 +1,8 @@
 <script>
     import { get } from "svelte/store";
     import fastapi from "../lib/api"
+    import moment from 'moment/min/moment-with-locales'
+    moment.locale('ko')
 
     export let params = {}
     let question_id = params.question_id
@@ -38,7 +40,7 @@
             <div class="card-text" style="white-space: pre-line;">{question.quest}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2">
-                    {question.create_date}
+                    {moment(question.create_date).format("YYYY년 MM월 DD일 a hh:mm")}
                 </div>
             </div>
         </div>
@@ -56,10 +58,17 @@
             <div class="card-text" style="white-space: pre-line;">{comment.content}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge bg-light text-dark p-2">
-                    {comment.create_date}
+                    {moment(comment.create_date).format("YYYY년 MM월 DD일 a hh:mm")}
                 </div>
             </div>
         </div>
     </div>
     {/each}
+    <!-- 답변 등록록 -->
+    <form method="post" class="my-3">
+        <div class="mb-3">
+            <textarea rows="10" bind:value={content} class="form-control"></textarea>
+        </div>
+        <input type="submit" value="답변등록" class="btn btn-primary" on:click="{post_comment}">
+    </form>
 </div>

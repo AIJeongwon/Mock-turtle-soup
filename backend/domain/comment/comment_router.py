@@ -19,4 +19,4 @@ def answer_create(question_id: int,
     question = question_crud.get_question(db, question_id=question_id)
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
-    comment_crud.create_comment(question=question, comment_create=_comment_create)
+    comment_crud.create_comment(db, question=question, comment_create=_comment_create)
