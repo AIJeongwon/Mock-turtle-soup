@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from domain.question.question_schema import QuestionCreate
-from models import Question
+from models import Question, User
 
 def get_question_list(db: Session, skip: int = 0, limit: int = 10):
     _question_list = db.query(Question)\
@@ -15,11 +15,12 @@ def get_question(db: Session, question_id: int):
     question = db.query(Question).get(question_id)
     return question
 
-def create_question(db: Session, question_create: QuestionCreate):
+def create_question(db: Session, question_create: QuestionCreate, user: User):
     db_question = Question(subject=question_create.subject,
                             quest=question_create.quest,
                             answer=question_create.answer,
-                            create_date=datetime.now())
+                            create_date=datetime.now(),
+                            user=user)
     db.add(db_question)
     db.commit()
 

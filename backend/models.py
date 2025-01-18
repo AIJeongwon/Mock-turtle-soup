@@ -12,6 +12,8 @@ class Question(Base):
     quest = Column(Text, nullable=False) # Content
     answer = Column(Text, nullable=False)
     create_date = Column(DateTime, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="question_users")
     
 
 class Comment(Base):
@@ -22,6 +24,8 @@ class Comment(Base):
     create_date = Column(DateTime, nullable=False)
     question_id = Column(Integer, ForeignKey("question.id"))
     question = relationship("Question", backref="comments")
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
+    user = relationship("User", backref="answer_users")
 
 
 class User(Base):
