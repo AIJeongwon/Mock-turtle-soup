@@ -14,6 +14,7 @@ class Question(Base):
     create_date = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="question_users")
+    modify_date = Column(DateTime, nullable=True)
     
 
 class Comment(Base):
@@ -26,6 +27,7 @@ class Comment(Base):
     question = relationship("Question", backref="comments")
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="answer_users")
+    modify_date = Column(DateTime, nullable=True)
 
 
 class User(Base):

@@ -11,8 +11,19 @@ class CommentCreate(BaseModel):
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v
 
+
+class CommentUpdate(CommentCreate):
+    comment_id: int
+
+
+class CommentDelete(BaseModel):
+    comment_id: int
+
+
 class Comment(BaseModel):
     id: int
     content: str
     create_date: datetime.datetime
     user: User | None
+    question_id: int
+    modify_date: datetime.datetime | None = None

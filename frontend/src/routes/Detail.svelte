@@ -1,11 +1,13 @@
 <script>
     import { get } from "svelte/store";
+    import { link, push } from 'svelte-spa-router'
     import fastapi from "../lib/api"
-    import { is_login } from "../lib/store"
+    import { is_login, username } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
     export let params = {}
+    let error = {detail:[]}
     let question_id = params.question_id
     let question = {comments:[]}
     let content = ""
@@ -31,6 +33,40 @@
             }
         )
     }
+
+    function delete_question(_question_id) {
+        if(window.confirm('정말로 삭제하시겠습니까?')) {
+            let url = "/api/question/delete"
+            let params = {
+                question_id: _question_id
+            }
+            fastapi('delete', url, params, 
+                (json) => {
+                    push('/')
+                },
+                (err_json) => {
+                    error = err_json
+                }
+            )
+        }
+    }
+
+    function delete_comment(comment_id) {
+        if(window.confirm('정말로 삭제하시겠습니까?')) {
+            let url = "/api/comment/delete"
+            let params = {
+                comment_id: comment_id
+            }
+            fastapi('delete', url, params, 
+                (json) => {
+                    get_question()
+                },
+                (err_json) => {
+                    error = err_json
+                }
+            )
+        }
+    }
 </script>
 
 <div class="container my-3">
@@ -40,6 +76,12 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{question.quest}</div>
             <div class="d-flex justify-content-end">
+                {#if question.modify_date }
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{moment(question.modify_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
+                </div>
+                {/if}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{ question.user ? question.user.username : ""}</div>
                     <div>{moment(question.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
@@ -52,22 +94,44 @@
             <div class="card-text" style="white-space: pre-line;">{question.answer}</div>
         </div>
     </div>
-    <!-- 답변 목록 -->
-    <h5 class="border-bottom my-3 py-2">{question.comments.length}개의 답변이 있습니다.</h5>
+    <div class="my-3">
+        {#if question.user && $username === question.user.username }
+        <a use:link href="/question-modify/{question.id}" 
+            class="btn btn-sm btn-outline-secondary">수정</a>
+        <button class="btn btn-sm btn-outline-secondary"
+            on:click={() => delete_question(question.id)}>삭제</button>
+        {/if}
+    </div>
+    <!-- 댓글 목록 -->
+    <h5 class="border-bottom my-3 py-2">{question.comments.length}개의 댓글이 있습니다.</h5>
     {#each question.comments as comment}
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{comment.content}</div>
             <div class="d-flex justify-content-end">
+                {#if comment.modify_date }
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{moment(comment.modify_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
+                </div>
+                {/if}
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">{ comment.user ? comment.user.username : ""}</div>
                     <div>{moment(comment.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</div>
                 </div>
             </div>
+            <div class="my-3">
+                {#if comment.user && $username === comment.user.username }
+                <a use:link href="/comment-modify/{comment.id}" 
+                    class="btn btn-sm btn-outline-secondary">수정</a>
+                <button class="btn btn-sm btn-outline-secondary"
+                    on:click={() => delete_comment(comment.id) }>삭제</button>
+                {/if}
+            </div>
         </div>
     </div>
     {/each}
-    <!-- 답변 등록 -->
+    <!-- 댓글 등록 -->
     <form method="post" class="my-3">
         <div class="mb-3">
             <textarea rows="10" bind:value={content} 

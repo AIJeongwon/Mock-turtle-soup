@@ -13,6 +13,7 @@ class Question(BaseModel):
     create_date: datetime.datetime
     comments: list[Comment] = []
     user: User | None
+    modify_date: datetime.datetime | None = None
 
 class QuestionCreate(BaseModel):
     subject: str
@@ -24,6 +25,12 @@ class QuestionCreate(BaseModel):
         if not v or not v.strip():
             raise ValueError('빈 값은 허용되지 않습니다.')
         return v;
+
+class QuestionUpdate(QuestionCreate):
+    question_id: int
+
+class QuestionDelete(BaseModel):
+    question_id: int
 
 class QuestionList(BaseModel):
     total: int = 0
