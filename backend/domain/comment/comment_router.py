@@ -55,3 +55,13 @@ def comment_delete(_comment_update: comment_schema.CommentDelete,
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="삭제 권한이 없습니다.")
     comment_crud.delete_comment(db=db, db_comment=db_comment)
+
+@router.post("/vote", status_code=status.HTTP_204_NO_CONTENT)
+def comment_vote(_comment_vote: comment_schema.CommentVote,
+                db: Session = Depends(get_db),
+                current_user: User = Depends(get_current_user)):
+    db_comment = comment_crud.get_comment(db, comment_id=_comment_vote.comment_id)
+    if not db_comment:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="데이터를 찾을수 없습니다.")
+    comment_crud.vote_answer(db, db_comment=db_comment, db_user=current_user)

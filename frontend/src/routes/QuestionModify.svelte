@@ -1,6 +1,7 @@
 <script>
     import { push } from 'svelte-spa-router'
     import fastapi from "../lib/api"
+    import { marked } from "marked"
 
     export let params = {}
     const question_id = params.question_id

@@ -25,3 +25,7 @@ def update_comment(db: Session, db_comment: Comment,
 def delete_comment(db: Session, db_comment: Comment):
     db.delete(db_comment)
     db.commit()
+
+def vote_answer(db: Session, db_comment: Comment, db_user: User):
+    db_comment.voter.append(db_user)
+    db.commit()

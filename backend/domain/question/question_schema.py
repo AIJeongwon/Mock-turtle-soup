@@ -14,6 +14,7 @@ class Question(BaseModel):
     comments: list[Comment] = []
     user: User | None
     modify_date: datetime.datetime | None = None
+    voter: list[User] = []
 
 class QuestionCreate(BaseModel):
     subject: str
@@ -35,3 +36,6 @@ class QuestionDelete(BaseModel):
 class QuestionList(BaseModel):
     total: int = 0
     question_list: list[Question] = []
+
+class QuestionVote(BaseModel):
+    question_id: int
