@@ -20,9 +20,6 @@
                     </li>
                 {:else}
                     <li class="nav-item">
-                        <a use:link class="nav-link" href="/user-create">회원가입</a>
-                    </li>
-                    <li class="nav-item">
                         <a use:link class="nav-link" href="/user-login">로그인</a>
                     </li>
                 {/if}

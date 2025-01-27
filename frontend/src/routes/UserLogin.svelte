@@ -1,6 +1,7 @@
 <script>
-    import { push } from 'svelte-spa-router'
+    import { push, link } from 'svelte-spa-router'
     import fastapi from "../lib/api"
+    import Title from "../assets/mock_turtle_soup.png"
     import Error from "../components/Error.svelte"
     import { access_token, username, is_login } from "../lib/store" 
 
@@ -29,18 +30,25 @@
     }
 </script>
 
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">로그인</h5>
-    <Error error={error} />
-    <form method="post">
-        <div class="mb-3">
-            <label for="username">사용자 이름</label>
-            <input type="text" class="form-control" id="username" bind:value="{login_username}">
-        </div>
-        <div class="mb-3">
-            <label for="password">비밀번호</label>
-            <input type="password" class="form-control" id="password" bind:value="{login_password}">
-        </div>
-        <button type="submit" class="btn btn-primary" on:click="{login}">로그인</button>
-    </form>
+<div class="form-signin">
+  <form method="post">
+    <div class="text-center">
+      <img class="mb-3" src={Title} alt="Title" width="200px" height="40px"/>
+      <h6 class="mb-4 border-bottom pb-3 fw-normal"><strong>바다거북스프 게임의 참가를 환영합니다.</strong></h6>
+    </div>
+
+    <div class="form-floating">
+      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" bind:value="{login_username}">
+      <label for="floatingInput">아이디</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" bind:value="{login_password}">
+      <label for="floatingPassword">비밀번호</label>
+    </div>
+    <div class="justify-content-center">
+      <button class="w-100 btn btn-lg btn-primary" type="submit" on:click="{login}">Login</button>
+      <button class="w-80 btn btn-lg btn-primary"><a use:link class="nav-link" href="/user-create">회원가입</a></button>
+    </div>
+  </form>
 </div>
