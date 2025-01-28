@@ -3,6 +3,7 @@
     import { link, push } from 'svelte-spa-router'
     import fastapi from "../lib/api"
     import { is_login, username } from "../lib/store"
+    import Error from "../components/Error.svelte"
     import { marked } from "marked"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
@@ -30,7 +31,11 @@
         fastapi('post', url, params,
             (json) => {
                 content = ''
+                error = {detail:[]}
                 get_question()
+            },
+            (err_json) => {
+                error = err_json
             }
         )
     }
@@ -179,6 +184,7 @@
     </div>
     {/each}
     <!-- 댓글 등록 -->
+    <Error error={error} />
     <form method="post" class="my-3">
         <div class="mb-3">
             <textarea rows="10" bind:value={content} 

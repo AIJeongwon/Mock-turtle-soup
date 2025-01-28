@@ -33,7 +33,7 @@
 <div class="form-signin">
   <form method="post">
     <div class="text-center">
-      <img class="mb-3" src={Title} alt="Title" width="200px" height="40px"/>
+      <img class="mb-4" src={Title} alt="Title" width="200px" height="40px"/>
       <h6 class="mb-4 border-bottom pb-3 fw-normal"><strong>바다거북스프 게임의 참가를 환영합니다.</strong></h6>
     </div>
 
@@ -46,9 +46,10 @@
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password" bind:value="{login_password}">
       <label for="floatingPassword">비밀번호</label>
     </div>
+
     <div class="justify-content-center">
-      <button class="w-100 btn btn-lg btn-primary" type="submit" on:click="{login}">Login</button>
-      <button class="w-80 btn btn-lg btn-primary"><a use:link class="nav-link" href="/user-create">회원가입</a></button>
+      <button class="mt-2 mb-3 w-100 btn btn-lg btn-outline-primary" type="submit" on:click="{login}">Login</button>
+      <button class="mb-3 w-100 btn btn-lg btn-outline-secondary"><a use:link class="nav-link" href="/user-create">회원가입</a></button>
     </div>
   </form>
 </div>

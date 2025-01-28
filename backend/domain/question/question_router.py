@@ -65,4 +65,7 @@ def question_vote(_question_vote: question_schema.QuestionVote,
     if not db_question:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="데이터를 찾을수 없습니다.")
+    if current_user.id == db_question.user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="본인의 글은 추천할 수 없습니다.")
     question_crud.vote_question(db, db_question=db_question, db_user=current_user)
